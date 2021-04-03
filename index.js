@@ -35,7 +35,9 @@ const options = {
   isLocal: getOption(['local', 'isLocal'], argv),
   output: argv.output ? argv.output === true ? outputName : sanitize(argv.output) : false,
   view: getOption(['view'], argv),
-  path: argv.path || argv.url ? getOption(['path', 'url'], argv) : argv._[0]
+  path: argv.path || argv.url ? getOption(['path', 'url'], argv) : argv._[0],
+  ignoreError: getOption(['ignoreError'], argv),
+  baseUrl: getOption(['baseUrl'], argv),
 }
 
 // set cache time (defaults to 60 minutes if unset)
@@ -81,10 +83,11 @@ Main Process
     console.log('═════════════════════════════════════════════════════════════')
     if (options.verbose) { console.log('') }
     const results = await validatePages(pagesToValidate, options)
+    const hasErrors = results.some(result => result.errors.length > 0)
     console.log('═════════════════════════════════════════════════════════════')
     console.log(getSummaryText(options.path, results))
     if (options.output) { exportOutput(results, options) }
-    exit(cyanOnBlack('Finished Checking, have an A-1 Day!'))
+    exit(cyanOnBlack('Finished Checking, have an A-1 Day!'), hasErrors)
   } catch (error) {
     exit(error, true)
   }
