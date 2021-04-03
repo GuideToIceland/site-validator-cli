@@ -20,6 +20,7 @@ const exit = require('./lib/exit')
 const ampValidator = require("./lib/ampValidator/ampValidator")
 const getUrlsFromFile = require('./lib/helpers-get-urls/get-urls-from-file')
 const { validate } = require('fast-xml-parser')
+const { validateStructuredDataUrls } = require('./lib/structuredDataValidator/structuredDataValidator')
 
 /*
 Parsing query parameters
@@ -100,8 +101,22 @@ if (options.path === undefined) {
     console.log(`\Running amp validation for a total of ${pagesToValidate.length} pages`)
     console.log('═════════════════════════════════════════════════════════════')
     await ampValidator(options.baseUrl, pagesToValidate);
-    //exit(cyanOnBlack('Finished Checking, have an A-1 Day!'))
   } catch (error) {
     exit(error, true)
   }
 })();
+
+
+(async () => {
+  try {
+    const htmlPages = await getUrls(options);
+    const ampPages = await getUrlsFromFile(options.ampFile);
+    const pagesToValidate = [...htmlPages, ...ampPages];
+    console.log(`\Running structured data validation for a total of ${pagesToValidate.length} pages`)
+    console.log('═════════════════════════════════════════════════════════════')
+    await validateStructuredDataUrls(options.baseUrl, pagesToValidate);
+  } catch (error) {
+    exit(error, true)
+  }
+})();
+
