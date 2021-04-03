@@ -13,10 +13,12 @@
     "node": ">=8.15.0"
   },
   "dependencies": {
+    "amphtml-validator": "^1.0.34",
     "cli-color": "2.0.0",
     "fast-xml-parser": "3.17.4",
     "flat-cache": "3.0.4",
     "html-validator": "^5.0.0",
+    "isomorphic-unfetch": "^3.1.0",
     "minimist": "1.2.5",
     "normalize-url": "5.3.0",
     "p-queue": "6.6.1",

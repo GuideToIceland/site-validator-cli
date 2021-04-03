@@ -17,6 +17,9 @@ const exportOutput = require('./lib/output/export-output')
 const viewOutput = require('./lib/output/view-output')
 const { cyanOnBlack } = require('./lib/clc')
 const exit = require('./lib/exit')
+const ampValidator = require("./lib/ampValidator/ampValidator")
+const getUrlsFromFile = require('./lib/helpers-get-urls/get-urls-from-file')
+const { validate } = require('fast-xml-parser')
 
 /*
 Parsing query parameters
@@ -38,6 +41,7 @@ const options = {
   path: argv.path || argv.url ? getOption(['path', 'url'], argv) : argv._[0],
   ignoreError: getOption(['ignoreError'], argv),
   baseUrl: getOption(['baseUrl'], argv),
+  ampFile: getOption(['ampFile'], argv),
 }
 
 // set cache time (defaults to 60 minutes if unset)
@@ -73,13 +77,10 @@ if (options.path === undefined) {
   exit('No path entered. \nIf path is not the 1st argument, you must prepend it with --url or --path.')
 }
 
-/*
-Main Process
- */
 (async () => {
   try {
     const pagesToValidate = await getUrls(options)
-    console.log(`\nEvaluating a total of ${pagesToValidate.length} pages`)
+    console.log(`\Validating the HTML of a total of ${pagesToValidate.length} pages`)
     console.log('═════════════════════════════════════════════════════════════')
     if (options.verbose) { console.log('') }
     const results = await validatePages(pagesToValidate, options)
@@ -91,4 +92,16 @@ Main Process
   } catch (error) {
     exit(error, true)
   }
-})()
+})();
+
+(async () => {
+  try {
+    const pagesToValidate = await getUrlsFromFile(options.ampFile);
+    console.log(`\Running amp validation for a total of ${pagesToValidate.length} pages`)
+    console.log('═════════════════════════════════════════════════════════════')
+    await ampValidator(options.baseUrl, pagesToValidate);
+    //exit(cyanOnBlack('Finished Checking, have an A-1 Day!'))
+  } catch (error) {
+    exit(error, true)
+  }
+})();
