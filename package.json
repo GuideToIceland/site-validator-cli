@@ -13,6 +13,7 @@
     "node": ">=8.15.0"
   },
   "dependencies": {
+    "async": "3.2.4",
     "amphtml-validator": "^1.0.34",
     "cli-color": "2.0.0",
     "fast-xml-parser": "3.17.4",
@@ -34,6 +35,7 @@
     "standard": "14.3.4"
   },
   "scripts": {
+    "test-run": "export BASE_URL=https://guidetoiceland.is && node ./index.js ./test.config.json --local --verbose --ignoreError=\"Bad value “Accept-CH” for attribute “http-equiv” on element “meta”.\" --ignoreError=\"CSS: “font-variation-settings”: Property “font-variation-settings” doesn't exist.\" --ignoreError=\"CSS: “unicode-range”: Too many values or values are not recognized.\" --ignoreError=\"Attribute “imagesrcset” not allowed on element “link” at this point.\" --ignoreError=\"Attribute “imagesizes” not allowed on element “link” at this point.\" --ignoreError=\"Element “link” is missing one or more of the following attributes: “href”, “resource”.\" --ignoreError=\"CSS: “contain-intrinsic-size”: Property “contain-intrinsic-size” doesn't exist.\" --ignoreError=\"CSS: “overflow-clip-margin”: Property “overflow-clip-margin” doesn't exist.\" --ignoreError=\"Attribute “.” not allowed on element “iframe” at this point.\" --quiet --baseUrl=\"${BASE_URL}\" --ampFile=ampTest.config.json",
     "test": "standard && npm audit && ava",
     "test-offline": "standard && ava",
     "standard-fix": "standard --fix",
