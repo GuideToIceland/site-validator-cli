@@ -69,7 +69,7 @@
   },
   "homepage": "https://github.com/p1ho/site-validator-cli#readme",
   "files": [
-    "lib/*",
+    "lib/**",
     "index.js"
   ]
 }
